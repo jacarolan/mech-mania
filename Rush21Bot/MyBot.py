@@ -12,7 +12,7 @@ first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
 stances = ["Rock", "Paper", "Scissors"]
-firstMoves =  [10, 9, 8, 14, 19, 23, 24]
+firstMoves =  [1, 3, 2, 4, 13, 20, 21]
 nodeCounter = 0
 
 ##########################################################################################
@@ -123,9 +123,10 @@ for line in fileinput.input():
 
             destination_node = me.destination
 
-    # Determines node on next turn
     currentMonster = game.get_monster(me.location)
     game.log(str(currentMonster))
+
+    # Determines node on next turn
 
     nodeAfterMoving = 0
     if me.movement_counter == me.speed + 1 and currentMonster.dead == True:

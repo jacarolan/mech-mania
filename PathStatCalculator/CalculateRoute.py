@@ -42,9 +42,9 @@ def routeCalculator(route):
             monsterHealth = data["Monsters"][index]["Health"]
             monstTime = math.ceil(monsterHealth // myDamage)
             if (monstTime < 7):
-                time += 7
+                time += 7 - speed
             else:
-                time += monstTime
+                time += 14 - 2 * speed
 
 
             dHealth += data["Monsters"][index]["Death Effects"]["Health"] - data["Monsters"][index]["Attack"] * monstTime
