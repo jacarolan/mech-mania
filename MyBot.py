@@ -6,7 +6,7 @@ import json
 # your import statements here
 import random
 import copy
-import Math
+import math
 
 first_line = True # DO NOT REMOVE
 
@@ -16,7 +16,7 @@ stances = ["Rock", "Paper", "Scissors"]
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
-	return get_value(node, game, 0)
+	return 0#get_value(node, game, 0)
 
 ##########################################################################################
 
@@ -25,22 +25,22 @@ def get_value(node, pastgame, nodes_traversed):
 	if nodes_traversed == 7:
 		return 0
 
-	game = copy.deepcopy(game)
+	game = copy.deepcopy(pastgame)
 
 	adjacent_nodes = game.get_adjacent_nodes()
 
 	me = game.get_self()
 	opponent = game.get_opponent()
 	
-	if room.has_monster(node):
+	if pastgame.has_monster(node):
 		monster = game.get_monster(node)
 
 		delta_time = monster.respawn_counter-monster.respawn_rate
 
 		fight_time = 0
 
-		if delta_time < 7-player.speed:
-			fight_time = Math.ceil(monster.get_health / player.get_damage)
+		if delta_time < 7-me.speed:
+			fight_time = math.ceil(monster.get_health / me.get_damage)
 
 		value = monster_value(node) / (delta_time + fight_time)
 
