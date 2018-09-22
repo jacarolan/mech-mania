@@ -13,6 +13,9 @@ first_line = True # DO NOT REMOVE
 # global variables or other functions can go here
 stances = ["Rock", "Paper", "Scissors"]
 
+firstMoves =  [1, 3, 2, 4, 13, 20, 21]
+nodeCounter = 0
+
 ##########################################################################################
 
 #This should return the relative value of travelling to specified node
@@ -82,16 +85,7 @@ def logNoError(x):
         return -math.inf
 
 def best_stance_no_monster(me, opponent):
-    case = random.randrange(2)
-    if case == 0:
-        rockValue = me.rock - opponent.paper
-        paperValue = me.paper - opponent.scissors
-        scissorsValue = me.scissors - opponent.rock
-
-        values = [rockValue, paperValue, scissorsValue]
-        return stances[values.index(max(values))]
-    if case == 1:
-        return get_winning_stance(opponent.stance)
+    return stances[random.randint(0,2)]
 
 def best_stance_with_monster(me, opponent, monster):
     return best_stance_no_monster(me, opponent)
@@ -126,24 +120,27 @@ for line in fileinput.input():
     me = game.get_self()
     opponent = game.get_opponent()
 
-    # Determines destination node
-    if me.location == me.destination:
-        maxVal = node_value(me.location, game)
-        destination_node = me.location
-
-        for node in game.get_adjacent_nodes(me.location):
-            current_value = node_value(node, game)
-
-            if current_value > maxVal:
-                destination_node = node
-                maxVal = current_value
-
+    if nodeCounter < 7:
+        destination_node = firstMoves[nodeCounter]
     else:
-        # Waiting for movement counter; should not change destination since that resets counter
-        destination_node = me.destination
+    # Determines destination node
+        if me.location == me.destination:
+            maxVal = node_value(me.location, game)
+            destination_node = me.location
 
-    if me.health < 50:
-        destination_node = game.shortest_paths(me.location, 0)[0][0]
+            for node in game.get_adjacent_nodes(me.location):
+                current_value = node_value(node, game)
+
+                if current_value > maxVal:
+                    destination_node = node
+                    maxVal = current_value
+
+        else:
+            # Waiting for movement counter; should not change destination since that resets counter
+            destination_node = me.destination
+
+        if me.health < 50:
+            destination_node = game.shortest_paths(me.location, 0)[0][0]
 
     if game.has_monster(me.location):
         monster = game.get_monster(me.location)
@@ -161,6 +158,7 @@ for line in fileinput.input():
     nextNode = 0
     if me.movement_counter == me.speed + 1:
         nextNode = destination_node
+        nodeCounter += 1
     else:
         nextNode = me.location
 
