@@ -13,11 +13,6 @@ first_line = True # DO NOT REMOVE
 # global variables or other functions can go here
 stances = ["Rock", "Paper", "Scissors"]
 
-data = {}
-
-with open("Map.json") as data_file:
-    data = json.load(data_file)
-
 ##########################################################################################
 
 #This should return the relative value of travelling to specified node
@@ -135,6 +130,11 @@ def monsterWillBeAlive(node, game):
     return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter == 1)
 
 def findMonster(node):
+    data = {}
+
+    with open('Map.json') as data_file:
+        data = json.load(data_file)
+
     for i in range(len(data["Monsters"])):
         if data["Monsters"][i]["Location"] == node:
             return (True, i)
@@ -142,6 +142,11 @@ def findMonster(node):
     return (False, 0)
 
 def routeCalculator(route):
+    data = {}
+
+    with open('Map.json') as data_file:
+        data = json.load(data_file)
+
     dHealth = 0
     rock = 1
     scissors = 1
@@ -193,7 +198,7 @@ def get_winning_stance(stance):
 
 
 def canGetThere(start, end, game):
-    shortestPath = game.shortest_Paths(start, end)
+    shortestPath = game.shortest_Paths(start, end)[0]
     otherPlayer = 0
 
     if me.player_num == 1:

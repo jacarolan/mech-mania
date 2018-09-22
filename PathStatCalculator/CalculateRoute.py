@@ -4,7 +4,7 @@ import math
 
 data = {}
 
-with open('Map.json') as data_file:
+with open('Map2.json') as data_file:
     data = json.load(data_file)
 
 def findMonster(node):
