@@ -1,5 +1,3 @@
-# This is Joe's general template
-
 # keep these three import statements
 import game_API
 import fileinput
@@ -8,21 +6,9 @@ import json
 # your import statements here
 import random
 
-###################################################
-########### ONLY EDIT BELOW THIS LINE #############
-###################################################
-
-#This should return the relative value of travelling to specified node
-
-
-###################################################
-########### ONLY EDIT ABOVE THIS LINE #############
-###################################################
-
 first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
-
 stances = ["Rock", "Paper", "Scissors"]
 
 ##########################################################################################
@@ -51,8 +37,6 @@ def get_winning_stance(stance):
         return "Scissors"
     elif stance == "Scissors":
         return "Rock"
-
-
 
 # main player script logic
 # DO NOT CHANGE BELOW ----------------------------
