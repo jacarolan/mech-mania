@@ -20,15 +20,20 @@ def node_value(node, game):
 
     #game.log(get_value(node, game, 0))
 
-    if game.has_monster(node):
+   # if game.has_monster(node):
         #game.log("a test message")
-        monster = game.get_monster(node)
-        game.log("Monster HP: "+str(monster.health))
+    #    monster = game.get_monster(node)
+     #   monster.health
+      #  monster.attack
+       # monster.death_effects
+        #monster.respawn_counter
+        #game.log("Monster HP: "+str(monster.health))
 
-    return 0
+    return get_value(node, game, 0)
+
 def get_value(node, pastgame, nodes_traversed):
 
-    if nodes_traversed == 7:
+    if nodes_traversed == 1:
         return 0
 
     game = copy.deepcopy(pastgame)
@@ -36,7 +41,7 @@ def get_value(node, pastgame, nodes_traversed):
     adjacent_nodes = game.get_adjacent_nodes()
 
     me = game.get_self()
-    opponent = game.get_opponent()
+    #opponent = game.get_opponent()
 
     if pastgame.has_monster(node):
         monster = game.get_monster(node)
@@ -48,7 +53,7 @@ def get_value(node, pastgame, nodes_traversed):
         if delta_time < 7-me.speed:
             fight_time = math.ceil(monster.get_health / me.get_damage)
 
-        base_value = monster_value(node) / (delta_time + fight_time)
+        base_value = 4#monster_value(node) / (delta_time + fight_time)
 
         value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
 
@@ -68,8 +73,8 @@ def get_value(node, pastgame, nodes_traversed):
 
         return value/2
 
-def monster_value(monster, map):
-    me = map.get_self()
+def monster_value(monster, game):
+    me = game.get_self()
 
     damage = 0
 
@@ -84,11 +89,11 @@ def monster_value(monster, map):
 
     attrDict = {}
 
-    attrDict['health'] = {'original': me.health, 'change': me.health-monster.attack*hits, 'weight': 1}
-    attrDict['rock'] = {'original': me.rock, 'change': me.rock+monster.death_effects['Rock'], 'weight': 1}
-    attrDict['paper'] = {'original': me.paper, 'change': me.paper+monster.death_effects['Paper'], 'weight': 1}
-    attrDict['scissors'] = {'original': me.scissors, 'change': me.scissors+monster.death_effects['Scissors'], 'weight': 1}
-    attrDict['speed'] = {'original': me.speed+1, 'change': me.speed+1+monster.death_effects['Speed'], 'weight': 1}
+    attrDict['health'] = {'original': me.health, 'change': monster.death_effects['Health']-monster.attack*hits, 'weight': 1}
+    attrDict['rock'] = {'original': me.rock, 'change': monster.death_effects['Rock'], 'weight': 1}
+    attrDict['paper'] = {'original': me.paper, 'change': monster.death_effects['Paper'], 'weight': 1}
+    attrDict['scissors'] = {'original': me.scissors, 'change': monster.death_effects['Scissors'], 'weight': 1}
+    attrDict['speed'] = {'original': me.speed+1, 'change': 1+monster.death_effects['Speed'], 'weight': 1}
 
     return logEvaluator(attrDict)
 
