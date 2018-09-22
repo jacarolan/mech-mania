@@ -13,13 +13,13 @@ first_line = True # DO NOT REMOVE
 # global variables or other functions can go here
 stances = ["Rock", "Paper", "Scissors"]
 
+##########################################################################################
+
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
     return random.random()
     #get_value(node, game, 0)
-
-##########################################################################################
 
 def get_value(node, pastgame, nodes_traversed):
 
