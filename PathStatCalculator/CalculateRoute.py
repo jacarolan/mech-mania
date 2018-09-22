@@ -1,4 +1,5 @@
 import json
+import math
 #route as a list
 
 data = {}
@@ -24,21 +25,22 @@ def routeCalculator(route):
 
 
     for node in route:
+
        if findMonster(node)[0]:
             index = findMonster(node)[1]
 
             monsterState = data["Monsters"][index]["Stance"]
-            myState = ""
+            myDamage = 0
 
             if monsterState == "Rock":
-                myState = "Paper"
+                myDamage = dPaper
             if monsterState == "Paper":
-                myState = "Scissors"
+                myDamage = dScissors
             if monsterState == "Scissors":
-                myState = "Rock"
-                
+                myDamage = dRock
+
             monsterHealth = data["Monsters"][index]["Health"]
-            monstTime = monsterHealth // dRock
+            monstTime = math.ceil(monsterHealth // myDamage)
             if (monstTime < 7):
                 time += 7
             else:
@@ -56,4 +58,10 @@ def routeCalculator(route):
     return {"Health": dHealth, "Rock": dRock, "Scissors": dScissors, "Paper": dPaper, "Speed": dSpeed, "Time": time}
 
 
-print(routeCalculator([0, 1, 3, 2, 4, 13, 20, 21]))
+print(routeCalculator([0, 10, 9, 8, 14, 19, 23, 24])) # good route
+print(routeCalculator([0, 10, 11, 12, 22, 21]))
+print(routeCalculator([0, 1, 3, 2, 4, 13, 20, 21])) # good route
+print(routeCalculator([0, 1, 3, 2, 4, 5, 6, 7, 8])) # really bad
+print(routeCalculator([0, 10, 9, 8, 7, 6, 5, 4]))
+print(routeCalculator([0, 1, 3, 2, 4, 13, 20, 19, 23, 24])) # good stats, bad health
+print(routeCalculator([0, 10, 9, 8, 14, 19, 23, 24, 19, 14, 8, 9, 10, 16, 15, 18, 17])) # very cool, Kanye!
