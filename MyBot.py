@@ -4,9 +4,9 @@
 import game_API
 import fileinput
 import json
-from helper_functions import *
 
 # your import statements here
+import random
 
 ###################################################
 ########### ONLY EDIT BELOW THIS LINE #############
@@ -22,6 +22,25 @@ from helper_functions import *
 first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
+
+stances = ["Rock", "Paper", "Scissors"]
+
+##########################################################################################
+
+def node_value(node, game):
+    # perhaps this could be the sum of two functions
+    # separate monster value and opponent value
+    return random.randint(0,10)
+
+#This should return the best stance at our current location
+def best_stance_no_monster(me, opponent):
+    return stances[random.randint(0,2)]
+
+def best_stance_with_monster(me, opponent, monster):
+    return best_stance_no_monster(me, opponent)
+
+##########################################################################################
+
 def monsterAlive(node, game):
     return game.has_monster(node) and not game.get_monster(node).dead
 
@@ -56,7 +75,7 @@ for line in fileinput.input():
 
         adjacent_nodes = game.get_adjacent_nodes(me.location)
 
-        maxVal = node_value(me.location)
+        maxVal = node_value(me.location, game)
         destination_node = me.location
 
         for node in game.get_adjacent_nodes(me.location):
