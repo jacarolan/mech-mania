@@ -18,13 +18,13 @@ stances = ["Rock", "Paper", "Scissors"]
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
     totalValue = 0
+    waitTime = 7 - game.get_self().speed
     for node2 in range(25):
         if node == node2:
             distance = 0
         else:
             distance = len(game.shortest_paths(node, node2)[0])
-
-        totalValue += (1/game.get_self().speed) ** (0.5 * distance) * max(raw_value(node2, game), 0)
+        totalValue += ((1/waitTime) ** (0.5 * distance)) * max(raw_value(node2, game), 0)
     return totalValue
 
 def raw_value(node, game):
