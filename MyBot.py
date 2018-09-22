@@ -82,8 +82,10 @@ def monster_value(monster, game):
 
     oldWaitTime = 7 - me.speed
     newWaitTime = max(oldWaitTime - benefits.speed, 2)
+    waitTimeWeight = (1 - (game.get_turn_num()/300))
 
-    attrDict['waitTime'] = {'original': 7 - me.speed, 'change': newWaitTime - oldWaitTime, 'weight': -1}
+    attrDict['waitTime'] = {'original': oldWaitTime,
+                            'change': newWaitTime - oldWaitTime, 'weight': -waitTimeWeight}
 
     stanceWeight = 1
     attrDict['rock'] = {'original': me.rock, 'change': benefits.rock, 'weight': stanceWeight}
