@@ -43,19 +43,25 @@ def get_value(node, pastgame, nodes_traversed):
         if delta_time < 7-me.speed:
             fight_time = math.ceil(monster.get_health / me.get_damage)
 
-        value = monster_value(node) / (delta_time + fight_time)
+        base_value = monster_value(node) / (delta_time + fight_time)
 
-        for node in adjacent_nodes:
-            value += get_value(node, game, nodes_traversed + 1)
+        value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
 
-        return value
+        for i in range(1, len(adjacent_nodes)):
+            calculated_value = get_value(adjacent_nodes[i], game, nodes_traversed + 1)
+            if calculated_value > value:
+                value = calculated_value
+
+        return (value+base_value)/2
     else:
-        value = 0
+        value = get_value(adjacent_nodes[0], game, nodes_traversed+1)
 
-        for node in adjacent_nodes:
-            value += get_value(node, game, nodes_traversed + 1)
+        for i in range(1,len(adjacent_nodes)):
+            calculated_value =  get_value(adjacent_nodes[i], game, nodes_traversed + 1)
+            if calculated_value > value:
+                value = calculated_value
 
-        return value
+        return value/2
 
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
