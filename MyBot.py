@@ -18,8 +18,14 @@ stances = ["Rock", "Paper", "Scissors"]
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
-    return random.random()
-    #get_value(node, game, 0)
+    #game.log(get_value(node, game, 0))
+
+    if game.has_monster(node):
+        #game.log("a test message")
+        monster = game.get_monster(node)
+        game.log("Monster HP: "+str(monster.health))
+
+    return 0
 
 def get_value(node, pastgame, nodes_traversed):
 
@@ -62,6 +68,49 @@ def get_value(node, pastgame, nodes_traversed):
                 value = calculated_value
 
         return value/2
+
+def monster_value(monster, map):
+    me = map.get_self()
+
+    damage = 0
+
+    if get_winning_stance(monster.stance) == stances[0]:
+        damage = me.rock
+    elif get_winning_stance(monster.stance) == stances[1]:
+        damage = me.paper
+    else:
+        damage = me.scissors
+
+    hits = math.ceil(monster.health/damage)
+
+    attrDict = {}
+
+    attrDict['health'] = {'original': me.health, 'change': me.health-monster.attack*hits, 'weight': 1}
+    attrDict['rock'] = {'original': me.rock, 'change': me.rock+monster.death_effects['Rock'], 'weight': 1}
+    attrDict['paper'] = {'original': me.paper, 'change': me.paper+monster.death_effects['Paper'], 'weight': 1}
+    attrDict['scissors'] = {'original': me.scissors, 'change': me.scissors+monster.death_effects['Scissors'], 'weight': 1}
+    attrDict['speed'] = {'original': me.speed+1, 'change': me.speed+1+monster.death_effects['Speed'], 'weight': 1}
+
+    return logEvaluator(attrDict)
+
+
+def logEvaluator(attributeDictionary):
+    # attribute dictionary format:
+    #  {health : {original : ? , change: ? , weight: ? },
+    #  rock : {original : ? , change: ? , weight: ? }}
+    totalScore = 0
+
+    for key, value in attributeDictionary.items():
+        newValue = value['original'] + value['change']
+        score = value['weight'] * logNoError(newValue / value['original'])
+        totalScore += score
+    return totalScore
+
+def logNoError(x):
+    if x > 0:
+        return math.log(x)
+    else:
+        return -math.inf
 
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
