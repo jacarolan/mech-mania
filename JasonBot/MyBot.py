@@ -51,11 +51,11 @@ def monster_value(monster, game):
 
     benefits = monster.death_effects
     attrDict['health'] = {'original': me.health,
-                          'change': benefits.health - monster.attack * hits, 'weight': 1}
+                          'change': benefits.health - monster.attack * hits, 'weight': 4}
 
     oldWaitTime = 7 - me.speed
     newWaitTime = max(oldWaitTime - benefits.speed, 2)
-    waitTimeWeight = (1 - (game.get_turn_num()/300)) * 10
+    waitTimeWeight = (1 - (game.get_turn_num()/300)) * 8
 
     attrDict['waitTime'] = {'original': oldWaitTime,
                             'change': newWaitTime - oldWaitTime, 'weight': -waitTimeWeight}
