@@ -19,11 +19,17 @@ def get_winning_stance(stance):
     elif stance == "Scissors":
         return "Rock"
 
+
+
 def node_value(node, map):
 	return random.randint(0,10)
 
+
+
 def best_stance(map):
 	return random.randint(0,2)
+
+
 
 # main player script logic
 # DO NOT CHANGE BELOW ----------------------------
@@ -44,7 +50,7 @@ for line in fileinput.input():
     if me.location == me.destination:
 
         adjacent_nodes = game.get_adjacent_nodes
-        adjacent_nodes[len(adjacent_nodes)] = me.location
+        adjacent_nodes.append(me.location)
 
         maxVal = node_value(adjacent_nodes[0], game)
 
