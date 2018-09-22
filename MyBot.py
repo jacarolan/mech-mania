@@ -71,8 +71,6 @@ def get_value(node, pastgame, nodes_traversed):
 def monster_value(monster, map):
     me = map.get_self()
 
-    damage = 0
-
     if get_winning_stance(monster.stance) == stances[0]:
         damage = me.rock
     elif get_winning_stance(monster.stance) == stances[1]:
@@ -83,15 +81,21 @@ def monster_value(monster, map):
     hits = math.ceil(monster.health/damage)
 
     attrDict = {}
+    benefits = monster.death_effects
+    attrDict['health'] = {'original': me.health,
+                          'change': benefits.health - monster.attack * hits, 'weight': 1}
 
-    attrDict['health'] = {'original': me.health, 'change': me.health-monster.attack*hits, 'weight': 1}
-    attrDict['rock'] = {'original': me.rock, 'change': me.rock+monster.death_effects['Rock'], 'weight': 1}
-    attrDict['paper'] = {'original': me.paper, 'change': me.paper+monster.death_effects['Paper'], 'weight': 1}
-    attrDict['scissors'] = {'original': me.scissors, 'change': me.scissors+monster.death_effects['Scissors'], 'weight': 1}
-    attrDict['speed'] = {'original': me.speed+1, 'change': me.speed+1+monster.death_effects['Speed'], 'weight': 1}
+    oldWaitTime = 7 - me.speed
+    newWaitTime = max(oldWaitTime - benefits.speed, 2)
+
+    attrDict['waitTime'] = {'original': 7 - me.speed, 'change': newWaitTime - oldWaitTime, 'weight': -1}
+
+    stanceWeight = 1
+    attrDict['rock'] = {'original': me.rock, 'change': benefits.rock, 'weight': stanceWeight}
+    attrDict['paper'] = {'original': me.paper, 'change': benefits.paper, 'weight': stanceWeight}
+    attrDict['scissors'] = {'original': me.scissors, 'change': benefits.scissors, 'weight': stanceWeight}
 
     return logEvaluator(attrDict)
-
 
 def logEvaluator(attributeDictionary):
     # attribute dictionary format:
