@@ -26,7 +26,6 @@ def node_value(node, game):
         game.log("Monster HP: "+str(monster.health))
 
     return 0
-
 def get_value(node, pastgame, nodes_traversed):
 
     if nodes_traversed == 7:
@@ -112,6 +111,12 @@ def logNoError(x):
     else:
         return -math.inf
 
+#This should return the relative value of travelling to specified node
+def node_value(node, game):
+
+    return random.random()
+    #get_value(node, game, 0)
+
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
 
@@ -146,19 +151,14 @@ for line in fileinput.input():
     # code in this block will be executed each turn of the game
 
     me = game.get_self()
-
     opponent = game.get_opponent()
 
     # Determines destination node
     if me.location == me.destination:
-
-        adjacent_nodes = game.get_adjacent_nodes(me.location)
-
         maxVal = node_value(me.location, game)
         destination_node = me.location
 
         for node in game.get_adjacent_nodes(me.location):
-
             current_value = node_value(node, game)
 
             if current_value > maxVal:
@@ -166,24 +166,24 @@ for line in fileinput.input():
                 maxVal = current_value
 
     else:
-
+        # Waiting for movement counter; should not change destination since that resets counter
         destination_node = me.destination
 
     # Determines node on next turn
 
-    nodeAfterMoving = 0
+    nextNode = 0
     if me.movement_counter == me.speed + 1:
-        nodeAfterMoving = destination_node
+        nextNode = destination_node
     else:
-        nodeAfterMoving = me.location
+        nextNode = me.location
 
     # Determines best stance, only calls function when dealing with other player
-    if monsterWillBeAlive(nodeAfterMoving, game):
-        if opponent.location == nodeAfterMoving:
-            chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nodeAfterMoving))
+    if monsterWillBeAlive(nextNode, game):
+        if opponent.location == nextNode:
+            chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nextNode))
         else:
             # if there's a monster at my location, choose the stance that damages that monster
-            chosen_stance = get_winning_stance(game.get_monster(nodeAfterMoving).stance)
+            chosen_stance = get_winning_stance(game.get_monster(nextNode).stance)
     else:
         chosen_stance = best_stance_no_monster(me, opponent)
 

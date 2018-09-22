@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8de70e74-ed4d-44ef-bc4b-2a45177f3b34" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/LogEvaluatorBot/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LogEvaluatorBot/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LogEvaluatorBot/MyBot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LogEvaluatorBot/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LogEvaluatorBot/game_API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JasonPlayground.py" beforeDir="false" afterPath="$PROJECT_DIR$/LogEvaluatorBot/JasonPlayground.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,12 +56,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+            <state relative-caret-position="-1425">
+              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
               <folding>
                 <element signature="e#37#52#0" expanded="true" />
-                <marker date="1537631944816" expanded="true" signature="468:474" ph="..." />
-                <marker date="1537631944816" expanded="true" signature="2204:2865" ph="..." />
               </folding>
             </state>
           </provider>
@@ -65,21 +69,9 @@
         <entry file="file://$PROJECT_DIR$/DefaultBot/game_API.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="420">
-              <caret line="40" column="28" lean-forward="true" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
+              <caret line="40" column="28" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/JasonPlayground.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -187,20 +179,11 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/JasonPlayground.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/JasonPlayground.py" />
     <entry file="file://$PROJECT_DIR$/DefaultBot/game_API.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
-          <caret line="40" column="28" lean-forward="true" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
+          <caret line="40" column="28" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -212,12 +195,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+        <state relative-caret-position="-1425">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
           <folding>
             <element signature="e#37#52#0" expanded="true" />
-            <marker date="1537631944816" expanded="true" signature="468:474" ph="..." />
-            <marker date="1537631944816" expanded="true" signature="2204:2865" ph="..." />
           </folding>
         </state>
       </provider>
