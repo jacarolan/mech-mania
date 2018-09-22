@@ -17,7 +17,6 @@ def node_value(node, game):
 
 	return random.randint(0,10)
 
-
 #This should return the best stance at our current location
 def best_stance(destination_node, game):
 
