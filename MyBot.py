@@ -57,7 +57,6 @@ def get_value(node, pastgame, nodes_traversed):
 
         return value
 
-#This should return the best stance at our current location
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
 
