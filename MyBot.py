@@ -12,13 +12,13 @@ import random
 ########### ONLY EDIT BELOW THIS LINE #############
 ###################################################
 
-#This should return the relative value of a node 
+#This should return the relative value of travelling to specified node
 def node_value(node, map):
 
 	return random.randint(0,10)
 
 
-
+#This should return the best stance at our current location
 def best_stance(map):
 
 	return random.randint(0,2)
