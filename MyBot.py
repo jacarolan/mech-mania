@@ -17,69 +17,23 @@ stances = ["Rock", "Paper", "Scissors"]
 
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
+    totalValue = 0
+    waitTime = 7 - game.get_self().speed
+    for node2 in range(25):
+        if node == node2:
+            distance = 0
+        else:
+            distance = len(game.shortest_paths(node, node2)[0])
+        totalValue += ((1/waitTime) ** (0.5 * distance)) * max(raw_value(node2, game), 0)
+    return totalValue
 
-    #game.log(get_value(node, game, 0))
-
-   # if game.has_monster(node):
-        #game.log("a test message")
-    #    monster = game.get_monster(node)
-     #   monster.health
-      #  monster.attack
-       # monster.death_effects
-        #monster.respawn_counter
-        #game.log("Monster HP: "+str(monster.health))
-
-    if node == game.get_self().location and game.has_monster(node):
-        monster = game.get_monster(node)
-        if not monster.dead:
-            return float('inf')
-
-    return get_value(node, game, 0)
-
-def get_value(node, pastgame, nodes_traversed):
-
-    if nodes_traversed == 5:
-        return 0
-
-    game = copy.deepcopy(pastgame)
-
-    adjacent_nodes = game.get_adjacent_nodes()
-
+def raw_value(node, game):
     me = game.get_self()
-    #opponent = game.get_opponent()
-
-    if pastgame.has_monster(node):
-        monster = game.get_monster(node)
-
-        delta_time = monster.respawn_counter-monster.respawn_rate
-
-        if delta_time < 0:
-            delta_time = 0
-
-        fight_time = 0
-
-        if delta_time < 7-me.speed:
-            fight_time = math.ceil(monster.get_health / me.get_damage)
-
-        base_value = monster_value(node) / (delta_time + fight_time)
-
-        value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
-
-        for i in range(1, len(adjacent_nodes)):
-            calculated_value = get_value(adjacent_nodes[i], game, nodes_traversed + 1)
-            if calculated_value > value:
-                value = calculated_value
-
-        return (value+base_value)/1.25
+    turnsUntilMoving = me.movement_counter - me.speed
+    if monsterWillBeAlive(node, game, turnsUntilMoving + 2):
+        return monster_value(game.get_monster(node), game)
     else:
-        value = get_value(adjacent_nodes[0], game, nodes_traversed+1)
-
-        for i in range(1,len(adjacent_nodes)):
-            calculated_value =  get_value(adjacent_nodes[i], game, nodes_traversed + 1)
-            if calculated_value > value:
-                value = calculated_value
-
-        return value/1.25
+        return 0
 
 def monster_value(monster, game):
     me = game.get_self()
@@ -97,12 +51,14 @@ def monster_value(monster, game):
 
     benefits = monster.death_effects
     attrDict['health'] = {'original': me.health,
-                          'change': benefits.health - monster.attack * hits, 'weight': 1}
+                          'change': benefits.health - monster.attack * hits, 'weight': 4}
 
     oldWaitTime = 7 - me.speed
     newWaitTime = max(oldWaitTime - benefits.speed, 2)
+    waitTimeWeight = (1 - (game.get_turn_num()/300)) * 8
 
-    attrDict['waitTime'] = {'original': 7 - me.speed, 'change': newWaitTime - oldWaitTime, 'weight': -1}
+    attrDict['waitTime'] = {'original': oldWaitTime,
+                            'change': newWaitTime - oldWaitTime, 'weight': -waitTimeWeight}
 
     stanceWeight = 1
     attrDict['rock'] = {'original': me.rock, 'change': benefits.rock, 'weight': stanceWeight}
@@ -110,7 +66,6 @@ def monster_value(monster, game):
     attrDict['scissors'] = {'original': me.scissors, 'change': benefits.scissors, 'weight': stanceWeight}
 
     return logEvaluator(attrDict)
-
 
 def logEvaluator(attributeDictionary):
     # attribute dictionary format:
@@ -130,12 +85,6 @@ def logNoError(x):
     else:
         return -math.inf
 
-#This should return the relative value of travelling to specified node
-def node_value(node, game):
-
-    return random.random()
-    #get_value(node, game, 0)
-
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
 
@@ -144,10 +93,10 @@ def best_stance_with_monster(me, opponent, monster):
 
 ##########################################################################################
 
-def monsterWillBeAlive(node, game):
+def monsterWillBeAlive(node, game, turns=1):
     if not game.has_monster(node):
         return False
-    return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter == 1)
+    return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter <= turns)
 
 def get_winning_stance(stance):
     if stance == "Rock":
