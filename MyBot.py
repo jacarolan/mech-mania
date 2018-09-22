@@ -17,9 +17,8 @@ def node_value(node, game):
 
 	return random.randint(0,10)
 
-
 #This should return the best stance at our current location
-def best_stance(game):
+def best_stance(destination_node, game):
 
 	return random.randint(0,2)
 
@@ -74,15 +73,22 @@ for line in fileinput.input():
             if (current_value > maxVal):
                 destination_node = i
                 maxVal = current_value
+
     else:
+
         destination_node = me.destination
 
     if opponent.location != me.location:
-        chosen_stance = stances[best_stance(game)]
+
+        chosen_stance = stances[best_stance(destination_node, game)]
+
     elif game.has_monster(me.location):
+
         # if there's a monster at my location, choose the stance that damages that monster
         chosen_stance = get_winning_stance(game.get_monster(me.location).stance)
+
     else:
+
         # otherwise, pick a random stance
         chosen_stance = stances[random.randint(0, 2)]
 
