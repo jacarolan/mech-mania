@@ -14,13 +14,19 @@ import random
 
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
-
-	return random.randint(0,10)
+    # perhaps this could be the sum of two functions
+    # separate monster value and opponent value
+    return random.randint(0,10)
 
 #This should return the best stance at our current location
-def best_stance(destination_node, game):
+def best_stance_no_monster(me, opponent):
+    return stances[random.randint(0,2)]
 
-	return random.randint(0,2)
+def best_stance_with_monster(me, opponent, monster):
+    return best_stance_no_monster(me, opponent)
+
+def monsterAlive(node):
+    return game.has_monster(node) and not game.get_monster(node).dead
 
 ###################################################
 ########### ONLY EDIT ABOVE THIS LINE #############
@@ -57,40 +63,43 @@ for line in fileinput.input():
 
     opponent = game.get_opponent()
 
+    # Determines destination node
     if me.location == me.destination:
 
         adjacent_nodes = game.get_adjacent_nodes(me.location)
-        adjacent_nodes.append(me.location)
 
-        maxVal = node_value(adjacent_nodes[0], game)
-
+        maxVal = node_value(me.location)
         destination_node = me.location
 
-        for i in game.get_adjacent_nodes(me.location):
+        for node in game.get_adjacent_nodes(me.location):
 
-            current_value = node_value(i, game)
+            current_value = node_value(node, game)
 
-            if (current_value > maxVal):
-                destination_node = i
+            if current_value > maxVal:
+                destination_node = node
                 maxVal = current_value
 
     else:
 
         destination_node = me.destination
 
-    if opponent.location != me.location:
+    # Determines node on next turn
 
-        chosen_stance = stances[best_stance(destination_node, game)]
-
-    elif game.has_monster(me.location):
-
-        # if there's a monster at my location, choose the stance that damages that monster
-        chosen_stance = get_winning_stance(game.get_monster(me.location).stance)
-
+    nodeAfterMoving = 0
+    if me.movement_counter == me.speed + 1:
+        nodeAfterMoving = destination_node
     else:
+        nodeAfterMoving = me.location
 
-        # otherwise, pick a random stance
-        chosen_stance = stances[random.randint(0, 2)]
+    # Determines best stance, only calls function when dealing with other player
+    if monsterAlive(nodeAfterMoving):
+        if opponent.location == nodeAfterMoving:
+            chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nodeAfterMoving))
+        else:
+            # if there's a monster at my location, choose the stance that damages that monster
+            chosen_stance = get_winning_stance(game.get_monster(me.location).stance)
+    else:
+        chosen_stance = best_stance_no_monster(me, opponent)
 
     # submit your decision for the turn (This function should be called exactly once per turn)
     game.submit_decision(destination_node, chosen_stance)
