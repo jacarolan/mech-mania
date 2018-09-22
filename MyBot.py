@@ -4,29 +4,16 @@
 import game_API
 import fileinput
 import json
+from helper_functions import *
 
 # your import statements here
-import random
 
 ###################################################
 ########### ONLY EDIT BELOW THIS LINE #############
 ###################################################
 
 #This should return the relative value of travelling to specified node
-def node_value(node, game):
-    # perhaps this could be the sum of two functions
-    # separate monster value and opponent value
-    return random.randint(0,10)
 
-#This should return the best stance at our current location
-def best_stance_no_monster(me, opponent):
-    return stances[random.randint(0,2)]
-
-def best_stance_with_monster(me, opponent, monster):
-    return best_stance_no_monster(me, opponent)
-
-def monsterAlive(node):
-    return game.has_monster(node) and not game.get_monster(node).dead
 
 ###################################################
 ########### ONLY EDIT ABOVE THIS LINE #############
@@ -35,7 +22,8 @@ def monsterAlive(node):
 first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
-stances = ["Rock", "Paper", "Scissors"]
+def monsterAlive(node, game):
+    return game.has_monster(node) and not game.get_monster(node).dead
 
 def get_winning_stance(stance):
     if stance == "Rock":
@@ -92,7 +80,7 @@ for line in fileinput.input():
         nodeAfterMoving = me.location
 
     # Determines best stance, only calls function when dealing with other player
-    if monsterAlive(nodeAfterMoving):
+    if monsterAlive(nodeAfterMoving, game):
         if opponent.location == nodeAfterMoving:
             chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nodeAfterMoving))
         else:
