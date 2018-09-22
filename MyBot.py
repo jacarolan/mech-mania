@@ -17,14 +17,10 @@ stances = ["Rock", "Paper", "Scissors"]
 
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
-    totalValue = 0
+    totalValue = raw_value(node, game)
     waitTime = 7 - game.get_self().speed
-    for node2 in range(25):
-        if node == node2:
-            distance = 0
-        else:
-            distance = len(game.shortest_paths(node, node2)[0])
-        totalValue += ((1/waitTime) ** (0.5 * distance)) * raw_value(node2, game)
+    for node2 in game.get_adjacent_nodes(node):
+        totalValue += ((1/waitTime) ** 0.5) * max(raw_value(node2, game), 0)
     return totalValue
 
 def raw_value(node, game):
@@ -51,11 +47,11 @@ def monster_value(monster, game):
 
     benefits = monster.death_effects
     attrDict['health'] = {'original': me.health,
-                          'change': benefits.health - monster.attack * hits, 'weight': 4}
+                          'change': benefits.health - monster.attack * hits, 'weight': 2}
 
     oldWaitTime = 7 - me.speed
     newWaitTime = max(oldWaitTime - benefits.speed, 2)
-    waitTimeWeight = (1 - (game.get_turn_num()/300)) * 8
+    waitTimeWeight = (1 - (game.get_turn_num()/300)) * 20
 
     attrDict['waitTime'] = {'original': oldWaitTime,
                             'change': newWaitTime - oldWaitTime, 'weight': -waitTimeWeight}
@@ -136,6 +132,20 @@ for line in fileinput.input():
     else:
         # Waiting for movement counter; should not change destination since that resets counter
         destination_node = me.destination
+
+    if me.health < 50:
+        destination_node = game.shortest_paths(me.location, 0)[0][0]
+
+    if game.has_monster(me.location):
+        monster = game.get_monster(me.location)
+        if not monster.dead:
+            if get_winning_stance(monster.stance) == stances[0]:
+                damage = me.rock
+            elif get_winning_stance(monster.stance) == stances[1]:
+                damage = me.paper
+            else:
+                damage = me.scissors
+            turns_to_kill = math.ceil(monster.health/damage)
 
     # Determines node on next turn
 
