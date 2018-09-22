@@ -125,10 +125,9 @@ for line in fileinput.input():
 
     # Determines node on next turn
     currentMonster = game.get_monster(me.location)
-    game.log(str(currentMonster))
 
     nodeAfterMoving = 0
-    if me.movement_counter == me.speed + 1 and currentMonster.dead == True:
+    if me.movement_counter == me.speed + 1 and currentMonster.dead == True and game.has_monster(me.location):
         nodeAfterMoving = destination_node
         nodeCounter += 1
     else:

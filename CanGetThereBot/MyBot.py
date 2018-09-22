@@ -82,6 +82,32 @@ def get_winning_stance(stance):
     elif stance == "Scissors":
         return "Rock"
 
+def canGetThere(start, end, game):
+    shortestPath = game.shortest_Paths(start, end)
+    otherPlayer = 0
+
+    if me.player_num == 1:
+        otherPlayer = game.player2
+    else:
+        otherPlayer = game.player1
+
+    myTime = CalculateRoute.routeCalculator(shortestPath)["Time"]
+
+    opponentMonsterHealth = game.get_monster(end).health
+    opponentMonsterStance = game.get_monster(end).stance
+
+    opponentStance = get_winning_stance(opponentMonsterStance)
+    opponentStanceStats = 0
+
+    if opponentStance == "Rock":
+        opponentStanceStats = otherPlayer.rock
+    elif opponentStance == "Paper":
+        opponentStanceStats = otherPlayer.paper
+    elif opponentStance == "Scissors":
+        opponentStanceStats = otherPlayer.scissors
+
+    timeToKill = opponentMonsterHealth/opponentStanceStats
+
 # main player script logic
 # DO NOT CHANGE BELOW ----------------------------
 for line in fileinput.input():
