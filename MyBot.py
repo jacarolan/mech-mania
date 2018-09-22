@@ -14,6 +14,9 @@ import Math
 ########### ONLY EDIT BELOW THIS LINE #############
 ###################################################
 
+
+
+
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
