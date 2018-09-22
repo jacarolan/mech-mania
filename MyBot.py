@@ -16,45 +16,46 @@ stances = ["Rock", "Paper", "Scissors"]
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
-	return 0#get_value(node, game, 0)
+    return random.random()
+    #get_value(node, game, 0)
 
 ##########################################################################################
 
 def get_value(node, pastgame, nodes_traversed):
 
-	if nodes_traversed == 7:
-		return 0
+    if nodes_traversed == 7:
+        return 0
 
-	game = copy.deepcopy(pastgame)
+    game = copy.deepcopy(pastgame)
 
-	adjacent_nodes = game.get_adjacent_nodes()
+    adjacent_nodes = game.get_adjacent_nodes()
 
-	me = game.get_self()
-	opponent = game.get_opponent()
-	
-	if pastgame.has_monster(node):
-		monster = game.get_monster(node)
+    me = game.get_self()
+    opponent = game.get_opponent()
 
-		delta_time = monster.respawn_counter-monster.respawn_rate
+    if pastgame.has_monster(node):
+        monster = game.get_monster(node)
 
-		fight_time = 0
+        delta_time = monster.respawn_counter-monster.respawn_rate
 
-		if delta_time < 7-me.speed:
-			fight_time = math.ceil(monster.get_health / me.get_damage)
+        fight_time = 0
 
-		value = monster_value(node) / (delta_time + fight_time)
+        if delta_time < 7-me.speed:
+            fight_time = math.ceil(monster.get_health / me.get_damage)
 
-		for node in adjacent_nodes:
-			value += get_value(node, game, nodes_traversed + 1)
+        value = monster_value(node) / (delta_time + fight_time)
 
-		return value
-	else:
-		value = 0
+        for node in adjacent_nodes:
+            value += get_value(node, game, nodes_traversed + 1)
 
-		for node in adjacent_nodes:
-			value += get_value(node, game, nodes_traversed + 1)
+        return value
+    else:
+        value = 0
 
-		return value
+        for node in adjacent_nodes:
+            value += get_value(node, game, nodes_traversed + 1)
+
+        return value
 
 #This should return the best stance at our current location
 def best_stance_no_monster(me, opponent):
