@@ -27,8 +27,10 @@ def best_stance_with_monster(me, opponent, monster):
 
 ##########################################################################################
 
-def monsterAlive(node, game):
-    return game.has_monster(node) and not game.get_monster(node).dead
+def monsterWillBeAlive(node, game):
+    if not game.has_monster(node):
+        return False
+    return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter == 1)
 
 def get_winning_stance(stance):
     if stance == "Rock":
@@ -83,7 +85,7 @@ for line in fileinput.input():
         nodeAfterMoving = me.location
 
     # Determines best stance, only calls function when dealing with other player
-    if monsterAlive(nodeAfterMoving, game):
+    if monsterWillBeAlive(nodeAfterMoving, game):
         if opponent.location == nodeAfterMoving:
             chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nodeAfterMoving))
         else:
