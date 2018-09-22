@@ -2,17 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8de70e74-ed4d-44ef-bc4b-2a45177f3b34" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/mech-mania.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogEvaluatorBot/.dockerignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogEvaluatorBot/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogEvaluatorBot/JasonPlayground.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogEvaluatorBot/MyBot.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogEvaluatorBot/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogEvaluatorBot/game_API.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/MyBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MyBot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -61,11 +50,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="19" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="2374">
+              <caret line="209" column="57" selection-start-line="209" selection-start-column="57" selection-end-line="209" selection-end-column="57" />
               <folding>
                 <element signature="e#37#52#0" expanded="true" />
-                <marker date="1537635367887" expanded="true" signature="468:469" ph="..." />
+                <marker date="1537640966093" expanded="true" signature="468:469" ph="..." />
               </folding>
             </state>
           </provider>
@@ -74,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DefaultBot/game_API.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="135" column="16" selection-start-line="135" selection-start-column="8" selection-end-line="135" selection-end-column="16" />
+            <state relative-caret-position="195">
+              <caret line="52" column="13" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -198,8 +187,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DefaultBot/game_API.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="135" column="16" selection-start-line="135" selection-start-column="8" selection-end-line="135" selection-end-column="16" />
+        <state relative-caret-position="195">
+          <caret line="52" column="13" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -208,11 +197,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MyBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="2374">
+          <caret line="209" column="57" selection-start-line="209" selection-start-column="57" selection-end-line="209" selection-end-column="57" />
           <folding>
             <element signature="e#37#52#0" expanded="true" />
-            <marker date="1537635367887" expanded="true" signature="468:469" ph="..." />
+            <marker date="1537640966093" expanded="true" signature="468:469" ph="..." />
           </folding>
         </state>
       </provider>

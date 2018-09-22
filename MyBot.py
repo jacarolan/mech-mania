@@ -18,11 +18,27 @@ stances = ["Rock", "Paper", "Scissors"]
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
+    #game.log(get_value(node, game, 0))
+
+   # if game.has_monster(node):
+        #game.log("a test message")
+    #    monster = game.get_monster(node)
+     #   monster.health
+      #  monster.attack
+       # monster.death_effects
+        #monster.respawn_counter
+        #game.log("Monster HP: "+str(monster.health))
+
+    if node == game.get_self().location and game.has_monster(node):
+        monster = game.get_monster(node)
+        if not monster.dead:
+            return float('inf')
+
     return get_value(node, game, 0)
 
 def get_value(node, pastgame, nodes_traversed):
 
-    if nodes_traversed == 1:
+    if nodes_traversed == 5:
         return 0
 
     game = copy.deepcopy(pastgame)
@@ -37,12 +53,15 @@ def get_value(node, pastgame, nodes_traversed):
 
         delta_time = monster.respawn_counter-monster.respawn_rate
 
+        if delta_time < 0:
+            delta_time = 0
+
         fight_time = 0
 
         if delta_time < 7-me.speed:
             fight_time = math.ceil(monster.get_health / me.get_damage)
 
-        base_value = 4#monster_value(node) / (delta_time + fight_time)
+        base_value = monster_value(node) / (delta_time + fight_time)
 
         value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
 
@@ -51,7 +70,7 @@ def get_value(node, pastgame, nodes_traversed):
             if calculated_value > value:
                 value = calculated_value
 
-        return (value+base_value)/2
+        return (value+base_value)/1.25
     else:
         value = get_value(adjacent_nodes[0], game, nodes_traversed+1)
 
@@ -60,7 +79,7 @@ def get_value(node, pastgame, nodes_traversed):
             if calculated_value > value:
                 value = calculated_value
 
-        return value/2
+        return value/1.25
 
 def monster_value(monster, game):
     me = game.get_self()
@@ -92,6 +111,7 @@ def monster_value(monster, game):
 
     return logEvaluator(attrDict)
 
+
 def logEvaluator(attributeDictionary):
     # attribute dictionary format:
     #  {health : {original : ? , change: ? , weight: ? },
@@ -109,6 +129,12 @@ def logNoError(x):
         return math.log(x)
     else:
         return -math.inf
+
+#This should return the relative value of travelling to specified node
+def node_value(node, game):
+
+    return random.random()
+    #get_value(node, game, 0)
 
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
