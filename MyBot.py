@@ -33,20 +33,30 @@ for line in fileinput.input():
 
     me = game.get_self()
 
-    if me.location == me.destination: # check if we have moved this turn
-        # get all living monsters closest to me
-        monsters = game.nearest_monsters(me.location, 1)
+    opponent = game.get_opponent()
 
-        # choose a monster to move to at random
-        monster_to_move_to = monsters[random.randint(0, len(monsters)-1)]
+    if me.location == me.destination:
 
-        # get the set of shortest paths to that monster
-        paths = game.shortest_paths(me.location, monster_to_move_to.location)
-        destination_node = paths[random.randint(0, len(paths)-1)][0]
+        adjacent_nodes = game.get_adjacent_nodes
+        adjacent_nodes[adjacent_nodes.len] = me.location
+
+        maxVal = node_value(adjacent_nodes[0], game)
+
+        destination_node = me.location
+
+        for i in game.get_adjacent_nodes(me.location):
+
+            current_value = node_value(i, game)
+
+            if (current_value > maxVal):
+                destination_node = i
+                maxVal = current_value
     else:
         destination_node = me.destination
 
-    if game.has_monster(me.location):
+    if opponent.location != me.location:
+        chosen_stance = best_stance(game)
+    elif game.has_monster(me.location):
         # if there's a monster at my location, choose the stance that damages that monster
         chosen_stance = get_winning_stance(game.get_monster(me.location).stance)
     else:
