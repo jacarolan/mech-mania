@@ -89,7 +89,6 @@ def best_stance_no_monster(me, opponent):
         scissorsValue = me.scissors - opponent.rock
 
         values = [rockValue, paperValue, scissorsValue]
-        game.log("Values: " + str(values))
         return stances[values.index(max(values))]
     if case == 1:
         if opponent.stance not in stances:
