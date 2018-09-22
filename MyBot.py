@@ -82,7 +82,14 @@ def logNoError(x):
         return -math.inf
 
 def best_stance_no_monster(me, opponent):
-    return stances[random.randint(0,2)]
+    case = 1
+    if case == 1:
+        rockValue = me.rock - opponent.paper
+        paperValue = me.paper - opponent.scissors
+        scissorsValue = me.scissors - opponent.rock
+
+        values = [rockValue, paperValue, scissorsValue]
+        return stances[values.index(max(values))]
 
 def best_stance_with_monster(me, opponent, monster):
     return best_stance_no_monster(me, opponent)
