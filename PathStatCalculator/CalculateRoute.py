@@ -4,7 +4,7 @@ import math
 
 data = {}
 
-with open('Map.json') as data_file:
+with open('Map2.json') as data_file:
     data = json.load(data_file)
 
 def findMonster(node):
@@ -17,10 +17,10 @@ def findMonster(node):
 
 def routeCalculator(route):
     dHealth = 0
-    dRock = 1
-    dScissors = 1
-    dPaper = 1
-    dSpeed = 0
+    rock = 1
+    scissors = 1
+    paper = 1
+    speed = 0
     time = 0
 
 
@@ -33,29 +33,29 @@ def routeCalculator(route):
             myDamage = 0
 
             if monsterState == "Rock":
-                myDamage = dPaper
+                myDamage = paper
             if monsterState == "Paper":
-                myDamage = dScissors
+                myDamage = scissors
             if monsterState == "Scissors":
-                myDamage = dRock
+                myDamage = rock
 
             monsterHealth = data["Monsters"][index]["Health"]
             monstTime = math.ceil(monsterHealth // myDamage)
             if (monstTime < 7):
-                time += 7
+                time += 7 - speed
             else:
-                time += monstTime
+                time += 14 - 2 * speed
 
 
             dHealth += data["Monsters"][index]["Death Effects"]["Health"] - data["Monsters"][index]["Attack"] * monstTime
-            dRock += data["Monsters"][index]["Death Effects"]["Rock"]
-            dScissors += data["Monsters"][index]["Death Effects"]["Scissors"]
-            dPaper += data["Monsters"][index]["Death Effects"]["Paper"]
-            dSpeed += data["Monsters"][index]["Death Effects"]["Speed"]
+            rock += data["Monsters"][index]["Death Effects"]["Rock"]
+            scissors += data["Monsters"][index]["Death Effects"]["Scissors"]
+            paper += data["Monsters"][index]["Death Effects"]["Paper"]
+            speed += data["Monsters"][index]["Death Effects"]["Speed"]
        else:
-           time += 7 - dSpeed
+           time += 7 - speed
 
-    return {"Health": dHealth, "Rock": dRock, "Scissors": dScissors, "Paper": dPaper, "Speed": dSpeed, "Time": time}
+    return {"Health": dHealth, "Rock": rock, " Scissors": scissors, " Paper": paper, " Speed": speed, " Time": time}
 
 
 print(routeCalculator([0, 10, 9, 8, 14, 19, 23, 24])) # good route
