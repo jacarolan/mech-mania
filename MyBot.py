@@ -15,6 +15,18 @@ stances = ["Rock", "Paper", "Scissors"]
 
 ##########################################################################################
 
+#This should return the relative value of travelling to specified node
+def node_value(node, game):
+
+    #game.log(get_value(node, game, 0))
+
+    if game.has_monster(node):
+        #game.log("a test message")
+        monster = game.get_monster(node)
+        game.log("Monster Health: " + str(monster.health))
+
+    return random.random()
+
 def get_value(node, pastgame, nodes_traversed):
 
     if nodes_traversed == 7:
@@ -37,25 +49,72 @@ def get_value(node, pastgame, nodes_traversed):
         if delta_time < 7-me.speed:
             fight_time = math.ceil(monster.get_health / me.get_damage)
 
-        value = monster_value(node) / (delta_time + fight_time)
+        base_value = monster_value(node) / (delta_time + fight_time)
 
-        for node in adjacent_nodes:
-            value += get_value(node, game, nodes_traversed + 1)
+        value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
 
-        return value
+        for i in range(1, len(adjacent_nodes)):
+            calculated_value = get_value(adjacent_nodes[i], game, nodes_traversed + 1)
+            if calculated_value > value:
+                value = calculated_value
+
+        return (value+base_value)/2
     else:
-        value = 0
+        value = get_value(adjacent_nodes[0], game, nodes_traversed+1)
 
-        for node in adjacent_nodes:
-            value += get_value(node, game, nodes_traversed + 1)
+        for i in range(1,len(adjacent_nodes)):
+            calculated_value =  get_value(adjacent_nodes[i], game, nodes_traversed + 1)
+            if calculated_value > value:
+                value = calculated_value
 
-        return value
+        return value/2
 
-#This should return the relative value of travelling to specified node
-def node_value(node, game):
+def monster_value(monster, map):
+    me = map.get_self()
 
-    return random.random()
-    #get_value(node, game, 0)
+    if get_winning_stance(monster.stance) == stances[0]:
+        damage = me.rock
+    elif get_winning_stance(monster.stance) == stances[1]:
+        damage = me.paper
+    else:
+        damage = me.scissors
+
+    hits = math.ceil(monster.health/damage)
+
+    attrDict = {}
+    benefits = monster.death_effects
+    attrDict['health'] = {'original': me.health,
+                          'change': benefits.health - monster.attack * hits, 'weight': 1}
+
+    oldWaitTime = 7 - me.speed
+    newWaitTime = max(oldWaitTime - benefits.speed, 2)
+
+    attrDict['waitTime'] = {'original': 7 - me.speed, 'change': newWaitTime - oldWaitTime, 'weight': -1}
+
+    stanceWeight = 1
+    attrDict['rock'] = {'original': me.rock, 'change': benefits.rock, 'weight': stanceWeight}
+    attrDict['paper'] = {'original': me.paper, 'change': benefits.paper, 'weight': stanceWeight}
+    attrDict['scissors'] = {'original': me.scissors, 'change': benefits.scissors, 'weight': stanceWeight}
+
+    return logEvaluator(attrDict)
+
+def logEvaluator(attributeDictionary):
+    # attribute dictionary format:
+    #  {health : {original : ? , change: ? , weight: ? },
+    #  rock : {original : ? , change: ? , weight: ? }}
+    totalScore = 0
+
+    for key, value in attributeDictionary.items():
+        newValue = value['original'] + value['change']
+        score = value['weight'] * logNoError(newValue / value['original'])
+        totalScore += score
+    return totalScore
+
+def logNoError(x):
+    if x > 0:
+        return math.log(x)
+    else:
+        return -math.inf
 
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
