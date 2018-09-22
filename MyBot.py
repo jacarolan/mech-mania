@@ -8,6 +8,25 @@ import json
 # your import statements here
 import random
 
+###################################################
+########### ONLY EDIT BELOW THIS LINE #############
+###################################################
+
+#This should return the relative value of a node 
+def node_value(node, map):
+
+	return random.randint(0,10)
+
+
+
+def best_stance(map):
+
+	return random.randint(0,2)
+
+###################################################
+########### ONLY EDIT ABOVE THIS LINE #############
+###################################################
+
 first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
@@ -20,16 +39,6 @@ def get_winning_stance(stance):
         return "Scissors"
     elif stance == "Scissors":
         return "Rock"
-
-
-
-def node_value(node, map):
-	return random.randint(0,10)
-
-
-
-def best_stance(map):
-	return random.randint(0,2)
 
 
 
@@ -51,7 +60,7 @@ for line in fileinput.input():
 
     if me.location == me.destination:
 
-        adjacent_nodes = game.get_adjacent_nodes
+        adjacent_nodes = game.get_adjacent_nodes(me.location)
         adjacent_nodes.append(me.location)
 
         maxVal = node_value(adjacent_nodes[0], game)
