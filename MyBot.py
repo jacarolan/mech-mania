@@ -5,6 +5,7 @@ import json
 
 # your import statements here
 import random
+from bots import randomBot
 
 first_line = True # DO NOT REMOVE
 
@@ -55,7 +56,7 @@ for line in fileinput.input():
         destination_node = me.destination
 
     if opponent.location != me.location:
-        chosen_stance = best_stance(game)
+        chosen_stance = stances[best_stance(game)]
     elif game.has_monster(me.location):
         # if there's a monster at my location, choose the stance that damages that monster
         chosen_stance = get_winning_stance(game.get_monster(me.location).stance)
