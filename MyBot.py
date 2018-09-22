@@ -24,7 +24,7 @@ def node_value(node, game):
             distance = 0
         else:
             distance = len(game.shortest_paths(node, node2)[0])
-        totalValue += ((1/waitTime) ** (0.5 * distance)) * max(raw_value(node2, game), 0)
+        totalValue += ((1/waitTime) ** (0.5 * distance)) * raw_value(node2, game)
     return totalValue
 
 def raw_value(node, game):
