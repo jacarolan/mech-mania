@@ -8,22 +8,26 @@ import random
 import copy
 import math
 
-from PathStatCalculator import CalculateRoute
+import PathStatCalculator
 
 first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
 stances = ["Rock", "Paper", "Scissors"]
-firstMoves =  [1, 3, 2, 4, 13, 20, 21]
-nodeCounter = 0
 
 ##########################################################################################
 
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
+    #game.log(get_value(node, game, 0))
+
+    if game.has_monster(node):
+        #game.log("a test message")
+        monster = game.get_monster(node)
+        # game.log("Monster Health: " + str(monster.health))
+
     return random.random()
-    #get_value(node, game, 0)
 
 def get_value(node, pastgame, nodes_traversed):
 
@@ -47,19 +51,72 @@ def get_value(node, pastgame, nodes_traversed):
         if delta_time < 7-me.speed:
             fight_time = math.ceil(monster.get_health / me.get_damage)
 
-        value = monster_value(node) / (delta_time + fight_time)
+        base_value = monster_value(node) / (delta_time + fight_time)
 
-        for node in adjacent_nodes:
-            value += get_value(node, game, nodes_traversed + 1)
+        value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
 
-        return value
+        for i in range(1, len(adjacent_nodes)):
+            calculated_value = get_value(adjacent_nodes[i], game, nodes_traversed + 1)
+            if calculated_value > value:
+                value = calculated_value
+
+        return (value+base_value)/2
     else:
-        value = 0
+        value = get_value(adjacent_nodes[0], game, nodes_traversed+1)
 
-        for node in adjacent_nodes:
-            value += get_value(node, game, nodes_traversed + 1)
+        for i in range(1,len(adjacent_nodes)):
+            calculated_value =  get_value(adjacent_nodes[i], game, nodes_traversed + 1)
+            if calculated_value > value:
+                value = calculated_value
 
-        return value
+        return value/2
+
+def monster_value(monster, map):
+    me = map.get_self()
+
+    if get_winning_stance(monster.stance) == stances[0]:
+        damage = me.rock
+    elif get_winning_stance(monster.stance) == stances[1]:
+        damage = me.paper
+    else:
+        damage = me.scissors
+
+    hits = math.ceil(monster.health/damage)
+
+    attrDict = {}
+    benefits = monster.death_effects
+    attrDict['health'] = {'original': me.health,
+                          'change': benefits.health - monster.attack * hits, 'weight': 1}
+
+    oldWaitTime = 7 - me.speed
+    newWaitTime = max(oldWaitTime - benefits.speed, 2)
+
+    attrDict['waitTime'] = {'original': 7 - me.speed, 'change': newWaitTime - oldWaitTime, 'weight': -1}
+
+    stanceWeight = 1
+    attrDict['rock'] = {'original': me.rock, 'change': benefits.rock, 'weight': stanceWeight}
+    attrDict['paper'] = {'original': me.paper, 'change': benefits.paper, 'weight': stanceWeight}
+    attrDict['scissors'] = {'original': me.scissors, 'change': benefits.scissors, 'weight': stanceWeight}
+
+    return logEvaluator(attrDict)
+
+def logEvaluator(attributeDictionary):
+    # attribute dictionary format:
+    #  {health : {original : ? , change: ? , weight: ? },
+    #  rock : {original : ? , change: ? , weight: ? }}
+    totalScore = 0
+
+    for key, value in attributeDictionary.items():
+        newValue = value['original'] + value['change']
+        score = value['weight'] * logNoError(newValue / value['original'])
+        totalScore += score
+    return totalScore
+
+def logNoError(x):
+    if x > 0:
+        return math.log(x)
+    else:
+        return -math.inf
 
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
@@ -82,6 +139,7 @@ def get_winning_stance(stance):
     elif stance == "Scissors":
         return "Rock"
 
+
 def canGetThere(start, end, game):
     shortestPath = game.shortest_Paths(start, end)
     otherPlayer = 0
@@ -91,7 +149,8 @@ def canGetThere(start, end, game):
     else:
         otherPlayer = game.player1
 
-    myTime = CalculateRoute.routeCalculator(shortestPath)["Time"]
+    myTime = PathStatCalculator.routeCalculator(shortestPath)["Time"]
+
 
     opponentMonsterHealth = game.get_monster(end).health
     opponentMonsterStance = game.get_monster(end).stance
@@ -106,7 +165,12 @@ def canGetThere(start, end, game):
     elif opponentStance == "Scissors":
         opponentStanceStats = otherPlayer.scissors
 
-    timeToKill = opponentMonsterHealth/opponentStanceStats
+    timeToKill = opponentMonsterHealth // opponentStanceStats
+
+    if timeToKill < myTime:
+        return False
+    else:
+        return True
 
 # main player script logic
 # DO NOT CHANGE BELOW ----------------------------
@@ -121,54 +185,47 @@ for line in fileinput.input():
     # code in this block will be executed each turn of the game
 
     me = game.get_self()
-
     opponent = game.get_opponent()
 
     stats = "Rock: " + str(me.rock) + "Paper: " + str(me.paper) + "Scissors: " + str(me.scissors)
+    game.log(str(stats))
 
     destination_node = me.location
+    getThere = canGetThere(me.location, opponent.location, game)
 
-    # if we haven't completed the first 7 moves (go to 24 first)
-    if nodeCounter < 7:
-        destination_node = firstMoves[nodeCounter]
+    game.log(str(getThere))
+
+    # Determines destination node
+    if me.location == me.destination:
+        maxVal = node_value(me.location, game)
+        destination_node = me.location
+
+        for node in game.get_adjacent_nodes(me.location):
+            current_value = node_value(node, game)
+
+            if current_value > maxVal:
+                destination_node = node
+                maxVal = current_value
+
     else:
-        # Determines destination node
-        if me.location == me.destination:
-
-            adjacent_nodes = game.get_adjacent_nodes(me.location)
-
-            maxVal = node_value(me.location, game)
-
-            for node in game.get_adjacent_nodes(me.location):
-
-                current_value = node_value(node, game)
-
-                if current_value > maxVal:
-                    destination_node = node
-                    maxVal = current_value
-
-        else:
-
-            destination_node = me.destination
-
-    currentMonster = game.get_monster(me.location)
+        # Waiting for movement counter; should not change destination since that resets counter
+        destination_node = me.destination
 
     # Determines node on next turn
 
-    nodeAfterMoving = 0
-    if me.movement_counter == me.speed + 1 and currentMonster.dead == True and game.has_monster(me.location):
-        nodeAfterMoving = destination_node
-        nodeCounter += 1
+    nextNode = 0
+    if me.movement_counter == me.speed + 1:
+        nextNode = destination_node
     else:
-        nodeAfterMoving = me.location
+        nextNode = me.location
 
     # Determines best stance, only calls function when dealing with other player
-    if monsterWillBeAlive(nodeAfterMoving, game):
-        if opponent.location == nodeAfterMoving:
-            chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nodeAfterMoving))
+    if monsterWillBeAlive(nextNode, game):
+        if opponent.location == nextNode:
+            chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nextNode))
         else:
             # if there's a monster at my location, choose the stance that damages that monster
-            chosen_stance = get_winning_stance(game.get_monster(nodeAfterMoving).stance)
+            chosen_stance = get_winning_stance(game.get_monster(nextNode).stance)
     else:
         chosen_stance = best_stance_no_monster(me, opponent)
 

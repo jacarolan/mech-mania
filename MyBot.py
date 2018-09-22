@@ -18,18 +18,11 @@ stances = ["Rock", "Paper", "Scissors"]
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
 
-    #game.log(get_value(node, game, 0))
-
-    if game.has_monster(node):
-        #game.log("a test message")
-        monster = game.get_monster(node)
-        game.log("Monster Health: " + str(monster.health))
-
-    return random.random()
+    return get_value(node, game, 0)
 
 def get_value(node, pastgame, nodes_traversed):
 
-    if nodes_traversed == 7:
+    if nodes_traversed == 1:
         return 0
 
     game = copy.deepcopy(pastgame)
@@ -37,7 +30,7 @@ def get_value(node, pastgame, nodes_traversed):
     adjacent_nodes = game.get_adjacent_nodes()
 
     me = game.get_self()
-    opponent = game.get_opponent()
+    #opponent = game.get_opponent()
 
     if pastgame.has_monster(node):
         monster = game.get_monster(node)
@@ -49,7 +42,7 @@ def get_value(node, pastgame, nodes_traversed):
         if delta_time < 7-me.speed:
             fight_time = math.ceil(monster.get_health / me.get_damage)
 
-        base_value = monster_value(node) / (delta_time + fight_time)
+        base_value = 4#monster_value(node) / (delta_time + fight_time)
 
         value = get_value(adjacent_nodes[0], game, nodes_traversed + 1)
 
@@ -69,8 +62,8 @@ def get_value(node, pastgame, nodes_traversed):
 
         return value/2
 
-def monster_value(monster, map):
-    me = map.get_self()
+def monster_value(monster, game):
+    me = game.get_self()
 
     if get_winning_stance(monster.stance) == stances[0]:
         damage = me.rock
@@ -82,6 +75,7 @@ def monster_value(monster, map):
     hits = math.ceil(monster.health/damage)
 
     attrDict = {}
+
     benefits = monster.death_effects
     attrDict['health'] = {'original': me.health,
                           'change': benefits.health - monster.attack * hits, 'weight': 1}
