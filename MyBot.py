@@ -1,3 +1,5 @@
+# This is Joe's general template
+
 # keep these three import statements
 import game_API
 import fileinput
