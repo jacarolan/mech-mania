@@ -8,12 +8,15 @@ import random
 import copy
 import math
 
-import PathStatCalculator
-
 first_line = True # DO NOT REMOVE
 
 # global variables or other functions can go here
 stances = ["Rock", "Paper", "Scissors"]
+
+data = {}
+
+with open("Map.json") as data_file:
+    data = json.load(data_file)
 
 ##########################################################################################
 
@@ -131,6 +134,55 @@ def monsterWillBeAlive(node, game):
         return False
     return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter == 1)
 
+def findMonster(node):
+    for i in range(len(data["Monsters"])):
+        if data["Monsters"][i]["Location"] == node:
+            return (True, i)
+
+    return (False, 0)
+
+def routeCalculator(route):
+    dHealth = 0
+    rock = 1
+    scissors = 1
+    paper = 1
+    speed = 0
+    time = 0
+
+
+    for node in route:
+
+       if findMonster(node)[0]:
+            index = findMonster(node)[1]
+
+            monsterState = data["Monsters"][index]["Stance"]
+            myDamage = 0
+
+            if monsterState == "Rock":
+                myDamage = paper
+            if monsterState == "Paper":
+                myDamage = scissors
+            if monsterState == "Scissors":
+                myDamage = rock
+
+            monsterHealth = data["Monsters"][index]["Health"]
+            monstTime = math.ceil(monsterHealth // myDamage)
+            if (monstTime < 7):
+                time += 7 - speed
+            else:
+                time += 14 - 2 * speed
+
+
+            dHealth += data["Monsters"][index]["Death Effects"]["Health"] - data["Monsters"][index]["Attack"] * monstTime
+            rock += data["Monsters"][index]["Death Effects"]["Rock"]
+            scissors += data["Monsters"][index]["Death Effects"]["Scissors"]
+            paper += data["Monsters"][index]["Death Effects"]["Paper"]
+            speed += data["Monsters"][index]["Death Effects"]["Speed"]
+       else:
+           time += 7 - speed
+
+    return {"Health": dHealth, "Rock": rock, " Scissors": scissors, " Paper": paper, " Speed": speed, " Time": time}
+
 def get_winning_stance(stance):
     if stance == "Rock":
         return "Paper"
@@ -149,7 +201,7 @@ def canGetThere(start, end, game):
     else:
         otherPlayer = game.player1
 
-    myTime = PathStatCalculator.routeCalculator(shortestPath)["Time"]
+    myTime = routeCalculator(shortestPath)["Time"]
 
 
     opponentMonsterHealth = game.get_monster(end).health
