@@ -17,13 +17,20 @@ stances = ["Rock", "Paper", "Scissors"]
 
 #This should return the relative value of travelling to specified node
 def node_value(node, game):
+    totalValue = 0
+    for node2 in range(25):
+        if node == node2:
+            distance = 0
+        else:
+            distance = len(game.shortest_paths(node, node2)[0])
 
-    return raw_value(node, game)
+        totalValue += (1/game.get_self().speed) ** (0.5 * distance) * max(raw_value(node2, game), 0)
+    return totalValue
 
 def raw_value(node, game):
     me = game.get_self()
     turnsUntilMoving = me.movement_counter - me.speed
-    if monsterWillBeAlive(node, game, turnsUntilMoving):
+    if monsterWillBeAlive(node, game, turnsUntilMoving + 2):
         return monster_value(game.get_monster(node), game)
     else:
         return 0
@@ -48,7 +55,7 @@ def monster_value(monster, game):
 
     oldWaitTime = 7 - me.speed
     newWaitTime = max(oldWaitTime - benefits.speed, 2)
-    waitTimeWeight = (1 - (game.get_turn_num()/300))
+    waitTimeWeight = (1 - (game.get_turn_num()/300)) * 10
 
     attrDict['waitTime'] = {'original': oldWaitTime,
                             'change': newWaitTime - oldWaitTime, 'weight': -waitTimeWeight}
