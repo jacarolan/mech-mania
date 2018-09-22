@@ -82,7 +82,7 @@ def logNoError(x):
         return -math.inf
 
 def best_stance_no_monster(me, opponent):
-    case = 0
+    case = game.get_turn_num() % 2
     if case == 0:
         rockValue = me.rock - opponent.paper
         paperValue = me.paper - opponent.scissors
@@ -91,6 +91,10 @@ def best_stance_no_monster(me, opponent):
         values = [rockValue, paperValue, scissorsValue]
         game.log("Values: " + str(values))
         return stances[values.index(max(values))]
+    if case == 1:
+        if opponent.stance not in stances:
+            return stances[0]
+        return get_winning_stance(opponent.stance)
 
 def best_stance_with_monster(me, opponent, monster):
     return best_stance_no_monster(me, opponent)
