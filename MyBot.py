@@ -146,6 +146,8 @@ for line in fileinput.input():
             else:
                 damage = me.scissors
             turns_to_kill = math.ceil(monster.health/damage)
+            if turns_to_kill > me.movement_counter - me.speed:
+                destination_node = me.location
 
     # Determines node on next turn
 
