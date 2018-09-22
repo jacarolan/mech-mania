@@ -118,10 +118,10 @@ def best_stance_with_monster(me, opponent, monster):
 
 ##########################################################################################
 
-def monsterWillBeAlive(node, game):
+def monsterWillBeAlive(node, game, turns=1):
     if not game.has_monster(node):
         return False
-    return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter == 1)
+    return (not game.get_monster(node).dead) or (game.get_monster(node).respawn_counter <= turns)
 
 def get_winning_stance(stance):
     if stance == "Rock":
