@@ -23,9 +23,10 @@ def node_value(node, game):
     if game.has_monster(node):
         #game.log("a test message")
         monster = game.get_monster(node)
-        game.log("Monster HP: "+str(monster.health))
+        game.log("Monster Health: " + str(monster.health))
 
-    return 0
+    return random.random()
+
 def get_value(node, pastgame, nodes_traversed):
 
     if nodes_traversed == 7:
@@ -114,12 +115,6 @@ def logNoError(x):
         return math.log(x)
     else:
         return -math.inf
-
-#This should return the relative value of travelling to specified node
-def node_value(node, game):
-
-    return random.random()
-    #get_value(node, game, 0)
 
 def best_stance_no_monster(me, opponent):
     return stances[random.randint(0,2)]
