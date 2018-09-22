@@ -88,7 +88,7 @@ for line in fileinput.input():
             chosen_stance = best_stance_with_monster(me, opponent, game.get_monster(nodeAfterMoving))
         else:
             # if there's a monster at my location, choose the stance that damages that monster
-            chosen_stance = get_winning_stance(game.get_monster(me.location).stance)
+            chosen_stance = get_winning_stance(game.get_monster(nodeAfterMoving).stance)
     else:
         chosen_stance = best_stance_no_monster(me, opponent)
 
