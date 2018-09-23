@@ -1,0 +1,25 @@
+Ideas:
+
+Store opponent's stances when opponent was playing against you, use probablistic analysis to calculate expected value for each stance
+
+Monster + Opponent Stance Function: Assume other player will try to beat monster, you play the thing that beats them
+
+Raw node value based on value from monster and value from other player
+
+----------------------------------------
+DONE
+----------------------------------------
+
+Speed metric should be equal to (7 - speed), take into account the upper limit of speed
+
+Make sure there's no division by 0
+
+Speed weight should be based on number of turns left until duel
+
+Total value = sum of (1/waittime)^(-length of shortest path to node) * relu(value of node)
+
+JOE is doing: Move immediately after beating monster
+
+JATIN is doing:
+value from other player = - your loss + their loss
+predicted damage = cbrt(r*p*s) * num
